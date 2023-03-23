@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import "./searchApp.css";
+ import { useDispatch, useSelector } from 'react-redux';
+ import {searchItems} from './Redux/searchSlice'
+import { AppDispatch } from './Redux/store';
 
 
 type SearchResult  = {
@@ -15,19 +18,27 @@ type SearchResult  = {
 type ResponseData = {
   resultCount: number;
   results: SearchResult[];
+  displayCount: number;
 }
 
 export type ResultItemProps = {
   result: SearchResult;
   musicPath: string;
 }
+
+
+  const offset = 0;
 function SearchView() {
+  
+  const data = useSelector((state: ResponseData) => state);
+  console.log(data);
+  const dispatch = useDispatch<AppDispatch>()
+
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [displayResultsCount, setDisplayResultsCount] = useState(10)
   const [displayResults, setDisplayResults] = useState<SearchResult[]>([]);
-  const offset = 0;
   const displatLimit =10;
   useEffect(()=>{
     window.addEventListener("scroll",()=>{
@@ -41,22 +52,22 @@ function SearchView() {
   })
    
   
-  const searchItems = () => {
+  // const searchItems = () => {
 
-    axios
-      .get<ResponseData>(`https://itunes.apple.com/search?term=${searchValue}`)
-      .then((response) => {
+  //   axios
+  //     .get<ResponseData>(`https://itunes.apple.com/search?term=${searchValue}`)
+  //     .then((response) => {
         
-        setSearchResults(response.data.results);
-        setDisplayResults(response.data.results.slice(offset,displatLimit))
+  //       setSearchResults(response.data.results);
+  //       setDisplayResults(response.data.results.slice(offset,displatLimit))
 
-        console.log(displayResults);
-      })
-      .catch((error) => {
-        // alert("server not responding at the moment. Please try again.");
+  //       console.log(displayResults);
+  //     })
+  //     .catch((error) => {
+  //       // alert("server not responding at the moment. Please try again.");
         
-      });
-  };
+  //     });
+  // };
 
   const renderedResult =  <div className="main-container">
   <header>Heyahh!!!! Get to know more about your favourite artist...</header>
@@ -68,7 +79,11 @@ function SearchView() {
       onChange={(e) => setSearchValue(e.target.value)}
     />
     <button onClick={()=>{
-      searchItems();
+     // searchItems();
+     dispatch(searchItems(searchValue));
+     setSearchResults(data.results);
+     setDisplayResults(data.results.slice(offset,displatLimit));
+
 
     }}>
       Search

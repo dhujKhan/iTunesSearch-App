@@ -11,7 +11,7 @@ header{
 }
 .search-container input{
   /* height: 40px; */
-  border-radius: 10px;
+  /* border-radius: 10px; */
   border:none;
   width:80%;
 
@@ -19,11 +19,11 @@ header{
 .search-container button{
   pointer-events: fill;
   height: 40px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
+  border: turquoise solid 2px;
   color:turquoise;
   font-size: large;
   background-color: white;
-  border:none;
 }
 .search-container{
   /* margin-top: 5%;
